@@ -31,7 +31,7 @@ struct ncclProxyArgs {
   uint64_t head;
   uint64_t tail;
   uint64_t end;
-  void* requests[NCCL_STEPS];
+  void* requests[NCCL_STEPS+2000];
   int idle;
 
   // Element linking
