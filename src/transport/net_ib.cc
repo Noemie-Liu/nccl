@@ -297,7 +297,7 @@ struct ncclIbSendFifo {
 struct ncclIbSendComm {
   struct ncclIbVerbs verbs;
   struct ncclIbSendFifo fifo[MAX_REQUESTS];
-  struct ncclIbRequest reqs[MAX_REQUESTS];
+  struct ncclIbRequest reqs[MAX_REQUESTS+2000];
   uint32_t fifoHead;
   int fd;
   int ready;
@@ -326,7 +326,7 @@ struct ncclIbRemFifo {
 struct ncclIbRecvComm {
   struct ncclIbVerbs verbs;
   struct ncclIbRemFifo remFifo;
-  struct ncclIbRequest reqs[MAX_REQUESTS];
+  struct ncclIbRequest reqs[MAX_REQUESTS+2000];
   int fd;
   int ready;
   struct ibv_qp* qp;
@@ -352,8 +352,8 @@ ncclResult_t ncclIbCreateQp(uint8_t ib_port, struct ncclIbVerbs* verbs, int acce
   qpInitAttr.recv_cq = verbs->cq;
   qpInitAttr.qp_type = IBV_QPT_RC;
   // We might send 2 requests per send (RDMA_WRITE+RDMA_WRITE_WITH_IMM)
-  qpInitAttr.cap.max_send_wr = 2*MAX_REQUESTS;
-  qpInitAttr.cap.max_recv_wr = MAX_REQUESTS;
+  qpInitAttr.cap.max_send_wr = 2*(MAX_REQUESTS+2000);
+  qpInitAttr.cap.max_recv_wr = MAX_REQUESTS+2000;
   qpInitAttr.cap.max_send_sge = 1;
   qpInitAttr.cap.max_recv_sge = 1;
   qpInitAttr.cap.max_inline_data = 0;
@@ -549,7 +549,7 @@ ncclResult_t ncclIbAccept(void* listenComm, void** recvComm) {
 }
 
 ncclResult_t ncclIbGetRequest(struct ncclIbRequest* reqs, struct ncclIbRequest** req) {
-  for (int i=0; i<MAX_REQUESTS; i++) {
+  for (int i=0; i<MAX_REQUESTS+2000; i++) {
     struct ncclIbRequest* r = reqs+i;
     if (r->used == 0) {
       r->used = 1;
