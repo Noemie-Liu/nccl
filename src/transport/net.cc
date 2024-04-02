@@ -384,7 +384,7 @@ ncclResult_t netRecvProxy(struct ncclProxyArgs* args) {
           int real_cut_size = i==num_cut-1? sliceSize-i*cut_size : cut_size;
           NCCLCHECK(ncclNetIrecv(resources->netRecvComm, localBuff+buffSlot*stepSize+i*cut_size, real_cut_size, mhandle, args->requests+total_num_cut+i));
           if (args->requests[total_num_cut+i] == NULL) {
-            step = 1;
+            test = 1;
           }
         }
         args->tail += args->sliceSteps;
@@ -408,8 +408,8 @@ ncclResult_t netRecvProxy(struct ncclProxyArgs* args) {
         if (args->protocol == NCCL_PROTO_SIMPLE) resources->recvMem->tail = args->head;
           args->idle = 0;
       }
-      //int sliceSize = stepSize * args->sliceSteps;
-      //int num_cut = (sliceSize-1)/cut_size+1;
+      int sliceSize = stepSize * args->sliceSteps;
+      int num_cut = (sliceSize-1)/cut_size+1;
       total_num_cut += num_cut;
     }
     if (args->head == args->end) {
@@ -590,7 +590,7 @@ ncclResult_t netRecvProxy(struct ncclProxyArgs* args) {
           int real_cut_size = i==num_cut-1? sliceSize-i*cut_size : cut_size;
           NCCLCHECK(ncclNetIrecv(resources->netRecvComm, localBuff+buffSlot*stepSize+i*cut_size, real_cut_size, mhandle, args->requests+total_num_cut+i));
           if (args->requests[total_num_cut+i] == NULL) {
-            step = 1;
+            test = 1;
           }
         }
         args->tail += args->sliceSteps;
@@ -614,8 +614,8 @@ ncclResult_t netRecvProxy(struct ncclProxyArgs* args) {
         if (args->protocol == NCCL_PROTO_SIMPLE) resources->recvMem->tail = args->head;
           args->idle = 0;
       }
-      //int sliceSize = stepSize * args->sliceSteps;
-      //int num_cut = (sliceSize-1)/cut_size+1;
+      int sliceSize = stepSize * args->sliceSteps;
+      int num_cut = (sliceSize-1)/cut_size+1;
       total_num_cut += num_cut;
     }
     if (args->head == args->end) {
