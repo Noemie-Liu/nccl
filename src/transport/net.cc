@@ -361,7 +361,6 @@ ncclResult_t netSendProxy(struct ncclProxyArgs* args) {
               int idx = indices[i];
               int real_cut_size = idx==num_cut-1? sizesFifo[buffSlot]-idx*cut_size : cut_size;
               NCCLCHECK(ncclNetIsend(resources->netSendComm, localBuff+buffSlot*stepSize+size_st, real_cut_size, mhandle, args->requests+total_num_cut-num_cut+idx));
-              INFO(NCCL_LZR, "TEST IF CHANGE USED");
               if (args->requests[total_num_cut-num_cut+idx] == NULL){
                 test = 1;
               }
